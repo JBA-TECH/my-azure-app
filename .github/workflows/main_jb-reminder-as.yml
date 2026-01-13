@@ -11,16 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-
       - name: npm install
         run: npm install
-
-      - name: Upload artifact for deployment
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
@@ -34,12 +31,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'jb-reminder-as'
-          # This uses the secret key you just added to GitHub
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: .
-          clean: true  # This wipes the Azure folder clean before deploying
+          clean: true  # Wipes the destination folder completely before deploying
